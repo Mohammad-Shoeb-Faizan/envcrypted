@@ -2,8 +2,16 @@
 
 > Secure your `.env` files with AES-256 encryption. Share safely with your team via local vault or GitHub. Zero account. Zero server. Just works.
 
-[![npm version](https://img.shields.io/npm/v/envcrypted)](https://www.npmjs.com/package/envcrypted)
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/envcrypted.svg)](https://www.npmjs.com/package/envcrypted)
+[![license](https://img.shields.io/npm/l/envcrypted.svg)](LICENSE)
+
+---
+
+## Demo
+
+<video src="https://res.cloudinary.com/dihe5x6gw/video/upload/v1773718582/envcrypted_yisvf8.mp4" controls width="100%"></video>
+
+> 📺 Can't see the video? [Watch it here](https://res.cloudinary.com/dihe5x6gw/video/upload/v1773718582/envcrypted_yisvf8.mp4)
 
 ---
 
