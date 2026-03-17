@@ -7,293 +7,56 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #080c0a;
-      --bg2: #0d1210;
-      --bg3: #111a14;
-      --green: #00ff88;
-      --green2: #00cc6a;
-      --green3: #004d29;
-      --cyan: #00ffd5;
-      --red: #ff4757;
-      --yellow: #ffd32a;
-      --text: #c8d8c8;
-      --text2: #6a8a6a;
-      --border: #1a2e1a;
+      --bg: #080c0a; --bg2: #0d1210; --bg3: #111a14;
+      --green: #00ff88; --green2: #00cc6a; --green3: #004d29;
+      --cyan: #00ffd5; --red: #ff4757; --yellow: #ffd32a;
+      --text: #c8d8c8; --text2: #6a8a6a; --border: #1a2e1a;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 40px 20px;
-    }
-
-    /* Scanlines */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
-      );
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    .demo-wrapper {
-      width: 100%;
-      max-width: 860px;
-    }
-
-    .demo-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .demo-header h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: 42px;
-      font-weight: 800;
-      letter-spacing: -2px;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
+    body { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: 'JetBrains Mono', monospace; padding: 40px 20px; }
+    body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px); pointer-events: none; z-index: 100; }
+    .demo-wrapper { width: 100%; max-width: 860px; }
+    .demo-header { text-align: center; margin-bottom: 40px; }
+    .demo-header h1 { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -2px; color: var(--text); margin-bottom: 8px; }
     .demo-header h1 span { color: var(--green); }
-
-    .demo-header p {
-      font-size: 13px;
-      color: var(--text2);
-      font-weight: 300;
-    }
-
-    /* Tab bar */
-    .tab-bar {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 0;
-      padding: 0 4px;
-    }
-
-    .tab {
-      padding: 10px 20px;
-      font-size: 12px;
-      color: var(--text2);
-      border-radius: 6px 6px 0 0;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid transparent;
-      border-bottom: none;
-      letter-spacing: 0.5px;
-      background: var(--bg3);
-    }
-
+    .demo-header p { font-size: 13px; color: var(--text2); font-weight: 300; }
+    .tab-bar { display: flex; gap: 4px; margin-bottom: 0; padding: 0 4px; }
+    .tab { padding: 10px 20px; font-size: 12px; color: var(--text2); border-radius: 6px 6px 0 0; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; border-bottom: none; letter-spacing: 0.5px; background: var(--bg3); }
     .tab:hover { color: var(--text); }
-
-    .tab.active {
-      color: var(--green);
-      border-color: var(--border);
-      background: #0a0f0a;
-      border-bottom: 1px solid #0a0f0a;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Terminal */
-    .terminal {
-      background: #0a0f0a;
-      border: 1px solid var(--border);
-      border-radius: 0 8px 8px 8px;
-      overflow: hidden;
-      box-shadow: 0 0 60px rgba(0,255,136,0.06), 0 32px 64px rgba(0,0,0,0.4);
-    }
-
-    .terminal-header {
-      padding: 12px 16px;
-      background: var(--bg3);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .tab.active { color: var(--green); border-color: var(--border); background: #0a0f0a; border-bottom: 1px solid #0a0f0a; position: relative; z-index: 2; }
+    .terminal { background: #0a0f0a; border: 1px solid var(--border); border-radius: 0 8px 8px 8px; overflow: hidden; box-shadow: 0 0 60px rgba(0,255,136,0.06), 0 32px 64px rgba(0,0,0,0.4); }
+    .terminal-header { padding: 12px 16px; background: var(--bg3); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
     .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot.r { background: #ff5f57; }
-    .dot.y { background: #ffbd2e; }
-    .dot.g { background: #28c840; }
-
-    .terminal-path {
-      margin-left: 12px;
-      font-size: 12px;
-      color: var(--text2);
-      letter-spacing: 0.3px;
-    }
-
+    .dot.r { background: #ff5f57; } .dot.y { background: #ffbd2e; } .dot.g { background: #28c840; }
+    .terminal-path { margin-left: 12px; font-size: 12px; color: var(--text2); letter-spacing: 0.3px; }
     .terminal-path .path-green { color: var(--green); }
-
-    .terminal-body {
-      padding: 28px 32px;
-      min-height: 420px;
-      font-size: 13.5px;
-      line-height: 1.75;
-      position: relative;
-    }
-
+    .terminal-body { padding: 28px 32px; min-height: 420px; font-size: 13.5px; line-height: 1.75; position: relative; }
     .line { display: flex; align-items: flex-start; gap: 0; margin-bottom: 2px; }
-    .line.gap { margin-top: 12px; }
-
     .prompt-sym { color: var(--green); margin-right: 10px; user-select: none; flex-shrink: 0; }
     .cmd { color: #ffffff; }
-    .cmd-key { color: var(--green); }
-    .cmd-flag { color: var(--cyan); }
-    .out-dim { color: var(--text2); }
-    .out-green { color: var(--green); }
-    .out-cyan { color: var(--cyan); }
-    .out-yellow { color: var(--yellow); }
-    .out-red { color: var(--red); }
-    .out-white { color: #ffffff; }
+    .out-dim { color: var(--text2); } .out-green { color: var(--green); } .out-cyan { color: var(--cyan); }
+    .out-yellow { color: var(--yellow); } .out-red { color: var(--red); } .out-white { color: #ffffff; }
     .out-bold { font-weight: 700; }
-
-    .cursor-blink {
-      display: inline-block;
-      width: 8px;
-      height: 15px;
-      background: var(--green);
-      animation: blink 1s step-end infinite;
-      vertical-align: middle;
-      margin-left: 2px;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
+    .cursor-blink { display: inline-block; width: 8px; height: 15px; background: var(--green); animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 2px; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     .indent { padding-left: 20px; }
-    .indent2 { padding-left: 36px; }
-
-    /* Progress bar */
-    .progress-bar {
-      width: 100%;
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      margin: 16px 0 8px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--green);
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.3s ease;
-      box-shadow: 0 0 8px var(--green);
-    }
-
-    /* Auto-play controls */
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
-      background: var(--bg3);
-    }
-
+    .controls { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-top: 1px solid var(--border); background: var(--bg3); }
     .control-btns { display: flex; gap: 8px; }
-
-    .ctrl-btn {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text2);
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: all 0.2s;
-    }
-
+    .ctrl-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text2); padding: 8px 16px; border-radius: 4px; font-size: 11px; font-family: 'JetBrains Mono', monospace; cursor: pointer; letter-spacing: 0.5px; transition: all 0.2s; }
     .ctrl-btn:hover { color: var(--green); border-color: var(--green3); }
     .ctrl-btn.active { color: var(--green); border-color: var(--green3); background: var(--green3); }
-
     .speed-label { font-size: 11px; color: var(--text2); letter-spacing: 0.5px; }
-
-    /* Step indicators */
-    .step-indicators {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 24px;
-    }
-
-    .step-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-
-    .step-dot.active {
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-    }
-
+    .step-indicators { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
+    .step-dot.active { background: var(--green); box-shadow: 0 0 8px var(--green); }
     .step-dot.done { background: var(--green3); }
-
-    /* Step labels */
-    .step-labels {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-top: 12px;
-    }
-
-    .step-label-item {
-      font-size: 11px;
-      color: var(--text2);
-      text-align: center;
-      transition: color 0.3s;
-      cursor: pointer;
-      letter-spacing: 0.3px;
-    }
-
+    .step-labels { display: flex; justify-content: center; gap: 32px; margin-top: 12px; }
+    .step-label-item { font-size: 11px; color: var(--text2); text-align: center; transition: color 0.3s; cursor: pointer; letter-spacing: 0.3px; }
     .step-label-item.active { color: var(--green); }
-    .step-label-item.done { color: var(--text2); }
-
-    /* Embed note */
-    .embed-note {
-      margin-top: 32px;
-      text-align: center;
-      font-size: 11px;
-      color: var(--text2);
-      letter-spacing: 0.3px;
-    }
-
-    .embed-note code {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 3px;
-      color: var(--green);
-      font-size: 11px;
-    }
   </style>
 </head>
 <body>
-
   <div class="demo-wrapper">
-
     <div class="demo-header">
       <h1>env<span>crypted</span> 🔐</h1>
       <p>Watch all 4 commands in action — live demo</p>
@@ -313,7 +76,7 @@
         <div class="dot g"></div>
         <span class="terminal-path">
           <span class="path-green">~/my-project</span>
-          &nbsp;—&nbsp;envcrypted
+          &nbsp;—&nbsp;envcrypted v1.0.3
         </span>
       </div>
       <div class="terminal-body" id="termBody"></div>
@@ -322,7 +85,7 @@
           <button class="ctrl-btn active" id="playBtn" onclick="togglePlay()">⏸ PAUSE</button>
           <button class="ctrl-btn" onclick="restartDemo()">↺ RESTART</button>
         </div>
-        <span class="speed-label" id="stepLabel">Step 1 of 4 — envcrypted init</span>
+        <span class="speed-label" id="stepLabel">Step 1 of 4 — npx envcrypted init</span>
       </div>
     </div>
 
@@ -339,16 +102,19 @@
       <span class="step-label-item" onclick="jumpToStep(2)">push</span>
       <span class="step-label-item" onclick="jumpToStep(3)">pull</span>
     </div>
-
   </div>
 
 <script>
-  // ─── All 4 demo scripts ────────────────────────────────────────────────────
   const STEPS = [
     {
-      label: 'envcrypted init',
+      label: 'npx envcrypted init',
       lines: [
-        { type: 'cmd', text: 'envcrypted init', delay: 0 },
+        { type: 'cmd', text: 'npm install envcrypted', delay: 0 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-dim', text: '  added 53 packages in 3.2s', delay: 1000 },
+        { type: 'out', cls: 'out-green', text: '  ✔  envcrypted installed', delay: 400 },
+        { type: 'blank', delay: 500 },
+        { type: 'cmd', text: 'npx envcrypted init', delay: 0 },
         { type: 'blank', delay: 400 },
         { type: 'out', cls: 'out-cyan', text: '  ███████╗███╗   ██╗██╗   ██╗ ██████╗██████╗ ██╗   ██╗██████╗ ████████╗███████╗██████╗', delay: 500 },
         { type: 'out', cls: 'out-cyan', text: '  ██╔════╝████╗  ██║██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗', delay: 100 },
@@ -356,7 +122,7 @@
         { type: 'out', cls: 'out-cyan', text: '  ██╔══╝  ██║╚██╗██║╚██╗ ██╔╝██║     ██╔══██╗  ╚██╔╝  ██╔═══╝    ██║   ██╔══╝  ██║  ██║', delay: 100 },
         { type: 'out', cls: 'out-cyan', text: '  ███████╗██║ ╚████║ ╚████╔╝ ╚██████╗██║  ██║   ██║   ██║        ██║   ███████╗██████╔╝', delay: 100 },
         { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-dim', text: '  v1.0.0 — Secure .env encryption. Zero account. Zero server. Just works.', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  v1.0.3 — Secure .env encryption. Zero account. Zero server. Just works.', delay: 300 },
         { type: 'blank', delay: 400 },
         { type: 'out', cls: 'out-white', text: '  Setting up envcrypted...', delay: 500 },
         { type: 'blank', delay: 300 },
@@ -378,14 +144,14 @@
         { type: 'blank', delay: 300 },
         { type: 'out', cls: 'out-cyan', text: '  Next steps:', delay: 300 },
         { type: 'out', cls: 'out-white', text: '     1. Add .env to your .gitignore', delay: 200 },
-        { type: 'out', cls: 'out-white', text: '     2. Run: envcrypted push', delay: 200 },
+        { type: 'out', cls: 'out-white', text: '     2. Run: npx envcrypted push', delay: 200 },
         { type: 'out', cls: 'out-white', text: '     3. Share master key securely with your team', delay: 200 },
       ]
     },
     {
-      label: 'envcrypted audit',
+      label: 'npx envcrypted audit',
       lines: [
-        { type: 'cmd', text: 'envcrypted audit', delay: 0 },
+        { type: 'cmd', text: 'npx envcrypted audit', delay: 0 },
         { type: 'blank', delay: 400 },
         { type: 'out', cls: 'out-dim', text: '  Scanning .env for issues...', delay: 600 },
         { type: 'blank', delay: 800 },
@@ -414,13 +180,13 @@
         { type: 'out', cls: 'out-yellow', text: '     Warnings : 1', delay: 200 },
         { type: 'out', cls: 'out-green', text: '     Safe     : 4', delay: 200 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  Run "envcrypted push" to encrypt and store your .env securely.', delay: 400 },
+        { type: 'out', cls: 'out-dim', text: '  Run "npx envcrypted push" to encrypt and store your .env securely.', delay: 400 },
       ]
     },
     {
-      label: 'envcrypted push',
+      label: 'npx envcrypted push',
       lines: [
-        { type: 'cmd', text: 'envcrypted push', delay: 0 },
+        { type: 'cmd', text: 'npx envcrypted push', delay: 0 },
         { type: 'blank', delay: 400 },
         { type: 'out', cls: 'out-dim', text: '  ? Enter your master key: ', extra: { cls: 'out-white', text: '••••••••••••••••••••••••••••••••' }, delay: 800 },
         { type: 'blank', delay: 600 },
@@ -446,18 +212,18 @@
       ]
     },
     {
-      label: 'envcrypted pull',
+      label: 'npx envcrypted pull',
       lines: [
         { type: 'out', cls: 'out-dim', text: '  # Simulating new team member joining...', delay: 0 },
         { type: 'blank', delay: 300 },
-        { type: 'cmd', text: 'ls', delay: 400 },
+        { type: 'cmd', text: 'npm install envcrypted', delay: 400 },
         { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-dim', text: '  .env.vault        .envcrypted.json       src/', delay: 400 },
-        { type: 'out', cls: 'out-dim', text: '  package.json      README.md', delay: 150 },
+        { type: 'out', cls: 'out-dim', text: '  added 53 packages in 3.1s', delay: 1000 },
+        { type: 'out', cls: 'out-green', text: '  ✔  envcrypted installed', delay: 300 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  # No .env file — just the encrypted vault', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  # .env.vault already in repo — no .env file', delay: 300 },
         { type: 'blank', delay: 400 },
-        { type: 'cmd', text: 'envcrypted pull', delay: 600 },
+        { type: 'cmd', text: 'npx envcrypted pull', delay: 600 },
         { type: 'blank', delay: 400 },
         { type: 'out', cls: 'out-dim', text: '  ? Enter your master key: ', extra: { cls: 'out-white', text: '••••••••••••••••••••••••••••••••' }, delay: 800 },
         { type: 'blank', delay: 600 },
@@ -480,21 +246,13 @@
     }
   ];
 
-  let currentStep = 0;
-  let currentLineIdx = 0;
-  let isPlaying = true;
-  let timer = null;
+  let currentStep = 0, currentLineIdx = 0, isPlaying = true, timer = null;
   const termBody = document.getElementById('termBody');
 
   function renderLine(line) {
     const div = document.createElement('div');
     div.className = 'line';
-    if (line.type === 'blank') {
-      div.innerHTML = '&nbsp;';
-      div.style.lineHeight = '0.5';
-      termBody.appendChild(div);
-      return;
-    }
+    if (line.type === 'blank') { div.innerHTML = '&nbsp;'; div.style.lineHeight = '0.5'; termBody.appendChild(div); return; }
     if (line.type === 'cmd') {
       div.innerHTML = `<span class="prompt-sym">$</span><span class="cmd">${line.text}</span>`;
     } else {
@@ -509,122 +267,59 @@
     termBody.scrollTop = termBody.scrollHeight;
   }
 
-  function addCursor() {
-    removeCursor();
-    const cur = document.createElement('span');
-    cur.className = 'cursor-blink';
-    cur.id = 'activeCursor';
-    termBody.appendChild(cur);
-  }
+  function addCursor() { removeCursor(); const cur = document.createElement('span'); cur.className = 'cursor-blink'; cur.id = 'activeCursor'; termBody.appendChild(cur); }
+  function removeCursor() { const old = document.getElementById('activeCursor'); if (old) old.remove(); }
 
-  function removeCursor() {
-    const old = document.getElementById('activeCursor');
-    if (old) old.remove();
-  }
-
-  function updateTabs() {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach((t, i) => t.classList.toggle('active', i === currentStep));
-  }
+  function updateTabs() { document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === currentStep)); }
 
   function updateDots() {
-    const dots = document.querySelectorAll('.step-dot');
-    const labels = document.querySelectorAll('.step-label-item');
-    dots.forEach((d, i) => {
-      d.classList.remove('active', 'done');
-      if (i === currentStep) d.classList.add('active');
-      else if (i < currentStep) d.classList.add('done');
-    });
-    labels.forEach((l, i) => {
-      l.classList.remove('active', 'done');
-      if (i === currentStep) l.classList.add('active');
-    });
+    document.querySelectorAll('.step-dot').forEach((d, i) => { d.classList.remove('active', 'done'); if (i === currentStep) d.classList.add('active'); else if (i < currentStep) d.classList.add('done'); });
+    document.querySelectorAll('.step-label-item').forEach((l, i) => { l.classList.remove('active'); if (i === currentStep) l.classList.add('active'); });
   }
 
-  function updateStepLabel() {
-    document.getElementById('stepLabel').textContent =
-      `Step ${currentStep + 1} of 4 — ${STEPS[currentStep].label}`;
-  }
+  function updateStepLabel() { document.getElementById('stepLabel').textContent = `Step ${currentStep + 1} of 4 — ${STEPS[currentStep].label}`; }
 
   function playNextLine() {
     if (!isPlaying) return;
     const step = STEPS[currentStep];
-
     if (currentLineIdx >= step.lines.length) {
-      // Step complete — move to next after pause
       removeCursor();
       if (currentStep < STEPS.length - 1) {
-        timer = setTimeout(() => {
-          currentStep++;
-          currentLineIdx = 0;
-          termBody.innerHTML = '';
-          updateTabs();
-          updateDots();
-          updateStepLabel();
-          addCursor();
-          playNextLine();
-        }, 2200);
+        timer = setTimeout(() => { currentStep++; currentLineIdx = 0; termBody.innerHTML = ''; updateTabs(); updateDots(); updateStepLabel(); addCursor(); playNextLine(); }, 2200);
       } else {
-        // All done — restart after pause
         timer = setTimeout(() => restartDemo(), 3000);
       }
       return;
     }
-
     const line = step.lines[currentLineIdx];
-    removeCursor();
-    renderLine(line);
-    addCursor();
+    removeCursor(); renderLine(line); addCursor();
     currentLineIdx++;
-
     timer = setTimeout(playNextLine, line.delay + 180);
   }
 
   function togglePlay() {
     isPlaying = !isPlaying;
     const btn = document.getElementById('playBtn');
-    if (isPlaying) {
-      btn.textContent = '⏸ PAUSE';
-      btn.classList.add('active');
-      playNextLine();
-    } else {
-      btn.textContent = '▶ PLAY';
-      btn.classList.remove('active');
-      clearTimeout(timer);
-    }
+    if (isPlaying) { btn.textContent = '⏸ PAUSE'; btn.classList.add('active'); playNextLine(); }
+    else { btn.textContent = '▶ PLAY'; btn.classList.remove('active'); clearTimeout(timer); }
   }
 
   function restartDemo() {
-    clearTimeout(timer);
-    currentStep = 0;
-    currentLineIdx = 0;
-    termBody.innerHTML = '';
+    clearTimeout(timer); currentStep = 0; currentLineIdx = 0; termBody.innerHTML = '';
     isPlaying = true;
     document.getElementById('playBtn').textContent = '⏸ PAUSE';
     document.getElementById('playBtn').classList.add('active');
-    updateTabs();
-    updateDots();
-    updateStepLabel();
-    addCursor();
-    playNextLine();
+    updateTabs(); updateDots(); updateStepLabel(); addCursor(); playNextLine();
   }
 
   function jumpToStep(idx) {
-    clearTimeout(timer);
-    currentStep = idx;
-    currentLineIdx = 0;
-    termBody.innerHTML = '';
+    clearTimeout(timer); currentStep = idx; currentLineIdx = 0; termBody.innerHTML = '';
     isPlaying = true;
     document.getElementById('playBtn').textContent = '⏸ PAUSE';
     document.getElementById('playBtn').classList.add('active');
-    updateTabs();
-    updateDots();
-    updateStepLabel();
-    addCursor();
-    playNextLine();
+    updateTabs(); updateDots(); updateStepLabel(); addCursor(); playNextLine();
   }
 
-  // Start
   addCursor();
   playNextLine();
 </script>
