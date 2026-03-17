@@ -10,7 +10,7 @@ const { generateMasterKey } = require('./crypto');
 const { pushLocalVault, pullLocalVault, auditEnvFile, saveConfig, loadConfig } = require('./vault');
 const { pushToGitHub, pullFromGitHub } = require('./github');
 
-const pkg = require('../package.json');
+const pkg = require('./package.json');
 
 // ─── Banner ───────────────────────────────────────────────────────────────────
 function printBanner() {
