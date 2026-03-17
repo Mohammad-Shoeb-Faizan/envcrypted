@@ -1,13 +1,13 @@
 {
   "name": "envcrypted",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Secure your .env files with AES-256 encryption. Share safely with your team via local vault or GitHub. Zero account. Zero server. Just works.",
-  "main": "src/index.js",
+  "main": "cli.js",
   "bin": {
-    "envcrypted": "./src/cli.js"
+    "envcrypted": "./cli.js"
   },
   "scripts": {
-    "start": "node src/cli.js"
+    "start": "node cli.js"
   },
   "keywords": [
     "env",
