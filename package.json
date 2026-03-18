@@ -1,6 +1,6 @@
 {
   "name": "envcrypted",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Secure your .env files with AES-256 encryption. Share safely with your team via local vault or GitHub. Zero account. Zero server. Just works.",
   "main": "cli.js",
   "bin": {
