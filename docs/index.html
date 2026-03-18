@@ -440,7 +440,7 @@
       <li><a href="#commands" onclick="closeNav()">Commands</a></li>
       <li><a href="#security" onclick="closeNav()">Security</a></li>
       <li><a href="#community" onclick="closeNav()">Community</a></li>
-      <li><a href="https://onetimesecret.com" onclick="closeNav()">Share Key</a></li>
+      <li><a href="https://onetimesecret.com" target="_blank" onclick="closeNav()">Share Key</a></li>
       <li><a href="https://github.com/Mohammad-Shoeb-Faizan/envcrypted" target="_blank" class="nav-cta">GitHub →</a></li>
     </ul>
     <button class="nav-hamburger" onclick="toggleNav()">☰</button>
@@ -531,7 +531,7 @@
             <div class="point-icon">🔐</div>
             <div>
               <div class="point-title">envcrypted fixes this workflow</div>
-              <div class="point-desc">Encrypt once. Commit the vault safely. Share the master key through a proper channel. Everyone stays in sync.</div>
+              <div class="point-desc">Encrypt once. Commit the vault safely. Share the secret key through a proper channel. Everyone stays in sync.</div>
             </div>
           </div>
         </div>
@@ -546,14 +546,14 @@
     <div class="container">
       <div class="section-label">How It Works</div>
       <h2 class="section-title fade-in">Simple by design.<br><span style="color:var(--green)">Secure by default.</span></h2>
-      <p class="section-sub fade-in">Four steps. One master key. Your secrets stay yours.</p>
+      <p class="section-sub fade-in">Four steps. One secret key. Your .env stays yours.</p>
 
       <div class="flow fade-in">
         <div class="flow-step">
           <div class="step-num">Step 01</div>
           <span class="step-icon">⚙️</span>
           <div class="step-name">Initialize</div>
-          <div class="step-desc">Generate master key, choose storage, auto-update .gitignore</div>
+          <div class="step-desc">Generate secret key, choose storage, auto-update .gitignore</div>
         </div>
         <div class="flow-step">
           <div class="step-num">Step 02</div>
@@ -571,7 +571,7 @@
           <div class="step-num">Step 04</div>
           <span class="step-icon">🔓</span>
           <div class="step-name">Decrypt</div>
-          <div class="step-desc">Team pulls + master key = .env restored instantly</div>
+          <div class="step-desc">Team pulls + secret key = .env restored instantly</div>
         </div>
       </div>
 
@@ -604,7 +604,7 @@
         <iframe
           src="terminal-demo.html"
           width="100%"
-          height="1200"
+          height="640"
           style="border:none; border-radius:12px; display:block;"
           loading="lazy"
           title="envcrypted interactive terminal demo">
@@ -627,7 +627,7 @@
         <div class="cmd-card fade-in">
           <div class="cmd-card-header"><span class="cmd-name">envcrypted init</span><span class="cmd-badge badge-setup">Setup</span></div>
           <div class="cmd-card-body">
-            <p class="cmd-desc">Set up envcrypted, generate a master key, choose storage (local or GitHub), and auto-update .gitignore to protect .env.</p>
+            <p class="cmd-desc">Set up envcrypted, generate a secret key, choose storage (local or GitHub), and auto-update .gitignore to protect .env.</p>
             <div class="cmd-usage"><span class="prompt">$</span>npx envcrypted init</div>
           </div>
         </div>
@@ -716,20 +716,20 @@
             <tr><td>Salt</td><td>64 bytes (random per encryption)</td></tr>
             <tr><td>IV</td><td>16 bytes (random per encryption)</td></tr>
             <tr><td>Auth Tag</td><td>16 bytes (tamper detection)</td></tr>
-            <tr><td>Master Key Storage</td><td class="spec-highlight">Never stored anywhere</td></tr>
+            <tr><td>Secret Key Storage</td><td class="spec-highlight">Never stored anywhere</td></tr>
             <tr><td>License</td><td class="spec-highlight">MIT — open source</td></tr>
           </table>
         </div>
         <div class="security-visual fade-in">
-          <h3>🔑 How the master key works</h3>
+          <h3>🔑 How the secret key works</h3>
           <div class="key-flow">
-            <div class="key-step"><div class="ks-num">1</div><div class="ks-text">You provide a <strong>master key</strong> (generated or custom)</div></div>
+            <div class="key-step"><div class="ks-num">1</div><div class="ks-text">You provide a <strong>secret key</strong> (generated or custom)</div></div>
             <div class="key-arrow">↓</div>
             <div class="key-step"><div class="ks-num">2</div><div class="ks-text"><strong>PBKDF2</strong> derives a 32-byte key (100K iterations)</div></div>
             <div class="key-arrow">↓</div>
             <div class="key-step"><div class="ks-num">3</div><div class="ks-text"><strong>AES-256-GCM</strong> encrypts with random salt + IV</div></div>
             <div class="key-arrow">↓</div>
-            <div class="key-step"><div class="ks-num">4</div><div class="ks-text">Vault is safe to commit. <strong>Master key is never stored.</strong></div></div>
+            <div class="key-step"><div class="ks-num">4</div><div class="ks-text">Vault is safe to commit. <strong>Secret key is never stored.</strong></div></div>
             <div class="key-arrow">↓</div>
             <div class="key-step"><div class="ks-num">5</div><div class="ks-text">Without the key, the vault is <strong>computationally impossible</strong> to crack</div></div>
           </div>
@@ -757,7 +757,7 @@
             <div><span class="t-dim">$</span> <span class="t-green">npx envcrypted hook install</span></div>
             <div><span class="t-dim">$</span> <span class="t-green">npx envcrypted push</span></div>
             <br>
-            <div><span class="t-dim"># share master key via password manager</span></div>
+            <div><span class="t-dim"># share secret key securely — never over chat</span></div>
           </div>
         </div>
         <div class="workflow-card fade-in">
@@ -829,16 +829,16 @@
   <!-- SHARE KEY -->
   <section class="share-key" id="share">
     <div class="container">
-      <div class="section-label">Share Master Key</div>
-      <h2 class="section-title fade-in">Share the master key<br><span style="color:var(--green)">the right way.</span></h2>
-      <p class="section-sub fade-in">You encrypted the vault. Now share the master key properly — a one-time link that self-destructs after being viewed. No trails in chat apps, email threads, or anywhere else.</p>
+      <div class="section-label">Secure Key Sharing</div>
+      <h2 class="section-title fade-in">Stop sending your<br><span style="color:var(--green)">secret key in chats.</span></h2>
+      <p class="section-sub fade-in">You encrypted the vault. Now share the secret key properly — a one-time link that self-destructs after being viewed once. No trails. No logs. No risk.</p>
 
       <div class="share-grid fade-in">
         <div class="share-explain">
           <div class="share-step">
             <div class="share-step-num">01</div>
             <div>
-              <div class="share-step-title">Paste your master key</div>
+              <div class="share-step-title">Paste your secret key</div>
               <div class="share-step-desc">Enter the key generated by <code>npx envcrypted init</code></div>
             </div>
           </div>
@@ -867,12 +867,12 @@
 
         <div class="share-cta-box">
           <div class="share-cta-icon">🔑</div>
-          <div class="share-cta-title">Share your master key safely</div>
+          <div class="share-cta-title">Share your secret key safely</div>
           <div class="share-cta-desc">
-            Generate a self-destructing one-time link for your master key.
+            Generate a self-destructing one-time link for your secret key.
             Works on any device. No account. No tracking. No trail.
           </div>
-          <a href="https://onetimesecret.com" class="share-cta-btn">
+          <a href="https://onetimesecret.com" target="_blank" class="share-cta-btn">
             🔗 Generate One-Time Link →
           </a>
           <div class="share-cta-note">
