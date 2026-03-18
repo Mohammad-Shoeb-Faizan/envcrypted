@@ -6,7 +6,7 @@
 
   <!-- Primary SEO -->
   <title>envcrypted — Secure .env Sharing for Developer Teams | AES-256 | Zero Account</title>
-  <meta name="description" content="Stop sharing .env files over WhatsApp. envcrypted is a dev-friendly CLI tool that encrypts, audits, and syncs your environment secrets. Zero account. Zero server. Works on Windows, macOS and Linux." />
+  <meta name="description" content="Stop leaking .env files through insecure channels. envcrypted is a dev-friendly CLI tool that encrypts, audits, and syncs your environment secrets. Zero account. Zero server. Works on Windows, macOS and Linux." />
   <meta name="keywords" content="env encryption, dotenv security, AES-256, CLI tool, nodejs, environment variables, secrets management, devtools, npm package, envcrypted, env sharing, git hook" />
   <meta name="author" content="Mohammad Shoeb Faizan" />
   <meta name="robots" content="index, follow" />
@@ -16,7 +16,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mohammad-shoeb-faizan.github.io/envcrypted/" />
   <meta property="og:title" content="envcrypted — Secure .env Sharing for Developer Teams" />
-  <meta property="og:description" content="Stop sharing .env files over WhatsApp. AES-256-GCM encrypted vaults for your environment secrets. Zero account. Zero server. Just works." />
+  <meta property="og:description" content="Stop leaking .env files through chat apps and email. AES-256-GCM encrypted vaults for your environment secrets. Zero account. Zero server. Just works." />
   <meta property="og:image" content="https://mohammad-shoeb-faizan.github.io/envcrypted/og-image.svg" />
   <meta property="og:site_name" content="envcrypted" />
 
@@ -24,7 +24,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://mohammad-shoeb-faizan.github.io/envcrypted/" />
   <meta name="twitter:title" content="envcrypted — Secure .env Sharing for Developer Teams" />
-  <meta name="twitter:description" content="Stop sharing .env files over WhatsApp. AES-256-GCM encrypted vaults. Zero account. Zero server." />
+  <meta name="twitter:description" content="Stop leaking .env files through insecure channels. AES-256-GCM encrypted vaults. Zero account. Zero server." />
   <meta name="twitter:image" content="https://mohammad-shoeb-faizan.github.io/envcrypted/og-image.svg" />
   <meta name="twitter:creator" content="@MohammadShoebFaizan" />
 
@@ -404,6 +404,26 @@
       .hero-install .cmd { font-size: 12px; }
       .big-install { padding: 20px; }
     }
+
+    /* ─── SHARE KEY ───────────────────────────────── */
+    .share-key { background: var(--bg3); }
+    .share-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .share-step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 28px; }
+    .share-step:last-child { margin-bottom: 0; }
+    .share-step-num { width: 32px; height: 32px; background: var(--green3); color: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; letter-spacing: 0.5px; }
+    .share-step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .share-step-desc { font-size: 12px; color: var(--text2); line-height: 1.6; font-weight: 300; }
+    .share-step-desc code { color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--bg); padding: 1px 6px; border-radius: 3px; border: 1px solid var(--border); }
+    .share-cta-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; position: relative; overflow: hidden; }
+    .share-cta-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); }
+    .share-cta-icon { font-size: 48px; margin-bottom: 16px; }
+    .share-cta-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; margin-bottom: 12px; }
+    .share-cta-desc { font-size: 13px; color: var(--text2); line-height: 1.7; font-weight: 300; margin-bottom: 24px; }
+    .share-cta-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: var(--bg); text-decoration: none; padding: 14px 28px; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; transition: all 0.2s; margin-bottom: 16px; }
+    .share-cta-btn:hover { background: var(--green2); }
+    .share-cta-note { font-size: 11px; color: var(--text2); }
+    .share-cta-note a { color: var(--green); text-decoration: none; }
+    @media (max-width: 900px) { .share-grid { grid-template-columns: 1fr; gap: 32px; } }
   </style>
 </head>
 <body>
@@ -420,6 +440,7 @@
       <li><a href="#commands" onclick="closeNav()">Commands</a></li>
       <li><a href="#security" onclick="closeNav()">Security</a></li>
       <li><a href="#community" onclick="closeNav()">Community</a></li>
+      <li><a href="share-key.html" onclick="closeNav()">Share Key</a></li>
       <li><a href="https://github.com/Mohammad-Shoeb-Faizan/envcrypted" target="_blank" class="nav-cta">GitHub →</a></li>
     </ul>
     <button class="nav-hamburger" onclick="toggleNav()">☰</button>
@@ -434,7 +455,7 @@
       <h1>
         <span class="dim">Stop sharing</span><br>
         <span class="green">.env</span> files<br>
-        <span class="dim">over WhatsApp.</span>
+        <span class="dim">over chat apps.</span>
       </h1>
       <p class="hero-sub">
         A dev-friendly CLI workflow for encrypting, auditing, and sharing your environment secrets.
@@ -468,7 +489,7 @@
             <div class="dot red"></div>
             <div class="dot yellow"></div>
             <div class="dot green"></div>
-            <span class="terminal-title">WhatsApp — Developer Chat</span>
+            <span class="terminal-title">Developer Chat — Slack / WhatsApp / Telegram</span>
           </div>
           <div class="terminal-body">
             <div><span class="t-dim">Khaleel:</span> <span class="t-white">bro can you send me the .env?</span></div>
@@ -489,7 +510,7 @@
             <div class="point-icon">💬</div>
             <div>
               <div class="point-title">Secrets sent over chat</div>
-              <div class="point-desc">Slack, WhatsApp, Telegram, email — none of these are safe channels for API keys and database passwords.</div>
+              <div class="point-desc">Chat apps, email, ticketing systems — none of these are safe channels for API keys and database passwords.</div>
             </div>
           </div>
           <div class="problem-point">
@@ -575,7 +596,19 @@
           <br>
           <div><span class="t-dim">$</span> <span class="t-green">npx envcrypted pull</span></div>
           <div><span class="t-cyan">&nbsp;&nbsp;✔&nbsp;&nbsp;.env restored successfully!</span></div>
+
+      <div class="fade-in" style="margin-top: 48px;">
+        <div style="font-size:11px; color:var(--text2); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">
+          ▶ Interactive Demo — all 8 commands
         </div>
+        <iframe
+          src="terminal-demo.html"
+          width="100%"
+          height="640"
+          style="border:none; border-radius:12px; display:block;"
+          loading="lazy"
+          title="envcrypted interactive terminal demo">
+        </iframe>
       </div>
     </div>
   </section>
@@ -785,6 +818,66 @@
           <div class="community-title">Using it daily?</div>
           <div class="community-desc">A GitHub star helps other developers find this tool. It also tells me the project is worth continuing to improve.</div>
           <a href="https://github.com/Mohammad-Shoeb-Faizan/envcrypted" target="_blank" class="community-link">Star on GitHub →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="divider"></div>
+
+  <!-- SHARE KEY -->
+  <section class="share-key" id="share">
+    <div class="container">
+      <div class="section-label">Share Master Key</div>
+      <h2 class="section-title fade-in">Share the master key<br><span style="color:var(--green)">the right way.</span></h2>
+      <p class="section-sub fade-in">You encrypted the vault. Now share the master key properly — a one-time link that self-destructs after being viewed. No trails in chat apps, email threads, or anywhere else.</p>
+
+      <div class="share-grid fade-in">
+        <div class="share-explain">
+          <div class="share-step">
+            <div class="share-step-num">01</div>
+            <div>
+              <div class="share-step-title">Paste your master key</div>
+              <div class="share-step-desc">Enter the key generated by <code>npx envcrypted init</code></div>
+            </div>
+          </div>
+          <div class="share-step">
+            <div class="share-step-num">02</div>
+            <div>
+              <div class="share-step-title">Get a one-time link</div>
+              <div class="share-step-desc">Powered by OneTimeSecret — open source, no account needed</div>
+            </div>
+          </div>
+          <div class="share-step">
+            <div class="share-step-num">03</div>
+            <div>
+              <div class="share-step-title">Share over any channel</div>
+              <div class="share-step-desc">Send via any channel — the link itself reveals nothing about the content</div>
+            </div>
+          </div>
+          <div class="share-step">
+            <div class="share-step-num">04</div>
+            <div>
+              <div class="share-step-title">Link self-destructs</div>
+              <div class="share-step-desc">Opened once → key is shown → link dies forever. Nobody can retrieve it again</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="share-cta-box">
+          <div class="share-cta-icon">🔑</div>
+          <div class="share-cta-title">Share your master key safely</div>
+          <div class="share-cta-desc">
+            Generate a self-destructing one-time link for your master key.
+            Works on any device. No account. No tracking. No trail.
+          </div>
+          <a href="share-key.html" class="share-cta-btn">
+            🔗 Generate One-Time Link →
+          </a>
+          <div class="share-cta-note">
+            Powered by <a href="https://onetimesecret.com" target="_blank">onetimesecret.com</a> — open source secret sharing
+          </div>
         </div>
       </div>
     </div>

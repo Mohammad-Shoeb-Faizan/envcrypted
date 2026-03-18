@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>envcrypted — Share Master Key Securely</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080c0a; --bg2: #0d1210; --bg3: #111a14;
+      --green: #00ff88; --green2: #00cc6a; --green3: #004d29;
+      --cyan: #00ffd5; --red: #ff4757; --yellow: #ffd32a;
+      --text: #c8d8c8; --text2: #6a8a6a; --border: #1a2e1a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .glow {
+      position: fixed;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .back-link:hover { color: var(--green); }
+
+    .header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .header h1 span { color: var(--green); }
+    .header p { font-size: 13px; color: var(--text2); font-weight: 300; line-height: 1.6; }
+
+    /* Card */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 24px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #ffbd2e; }
+    .dot.g { background: #28c840; }
+
+    .card-title {
+      font-size: 12px;
+      color: var(--text2);
+      margin-left: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .card-body { padding: 28px; }
+
+    /* Steps */
+    .step-indicator {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 11px;
+      color: var(--text2);
+      border-bottom: 2px solid var(--border);
+      letter-spacing: 0.5px;
+      transition: all 0.3s;
+    }
+
+    .step.active {
+      color: var(--green);
+      border-bottom-color: var(--green);
+    }
+
+    .step.done {
+      color: var(--green3);
+      border-bottom-color: var(--green3);
+    }
+
+    /* Form */
+    .form-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      color: var(--text2);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .input-wrap { position: relative; }
+
+    input[type="text"], input[type="password"], textarea, select {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+      border-color: var(--green3);
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+      line-height: 1.6;
+    }
+
+    select option { background: var(--bg3); }
+
+    .toggle-vis {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .toggle-vis:hover { color: var(--green); }
+
+    .input-hint {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    /* Warning box */
+    .warning-box {
+      background: rgba(255,71,87,0.06);
+      border: 1px solid rgba(255,71,87,0.2);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: #ff7b72;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .warning-box strong { color: var(--red); }
+
+    /* Info box */
+    .info-box {
+      background: rgba(0,255,136,0.04);
+      border: 1px solid rgba(0,255,136,0.15);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .info-box strong { color: var(--green); }
+
+    /* Button */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--green);
+      border: none;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--bg);
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover { background: var(--green2); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn.loading { background: var(--green3); color: var(--green); }
+
+    /* Result screen */
+    .result-screen { display: none; }
+    .result-screen.show { display: block; }
+
+    .link-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+    }
+
+    .link-label {
+      font-size: 10px;
+      color: var(--text2);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .link-url {
+      font-size: 12px;
+      color: var(--green);
+      word-break: break-all;
+      line-height: 1.6;
+    }
+
+    .copy-link-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--green3);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--green);
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .copy-link-btn:hover { background: var(--green); color: var(--bg); }
+
+    .success-note {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.7;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .success-note strong { color: var(--text); }
+
+    .new-link-btn {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text2);
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      margin-top: 12px;
+    }
+    .new-link-btn:hover { color: var(--green); border-color: var(--green3); }
+
+    /* How it works mini */
+    .how-row {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+
+    .how-step {
+      flex: 1;
+      text-align: center;
+      padding: 12px 8px;
+      font-size: 11px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .how-step .how-icon { font-size: 20px; display: block; margin-bottom: 6px; }
+    .how-step:not(:last-child)::after { content: '→'; color: var(--border); font-size: 14px; }
+
+    /* Error */
+    .error-msg {
+      background: rgba(255,71,87,0.08);
+      border: 1px solid rgba(255,71,87,0.2);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--red);
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* Expiry options */
+    .expiry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .expiry-btn {
+      padding: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text2);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .expiry-btn:hover, .expiry-btn.selected {
+      color: var(--green);
+      border-color: var(--green3);
+      background: rgba(0,255,136,0.04);
+    }
+
+    @media (max-width: 480px) {
+      .header h1 { font-size: 28px; }
+      .expiry-grid { grid-template-columns: repeat(2, 1fr); }
+      .how-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="glow"></div>
+
+  <div class="wrapper">
+    <div class="header">
+      <a href="index.html" class="back-link">← back to envcrypted</a>
+      <h1>Share <span>Master Key</span> 🔐</h1>
+      <p>Generate a one-time link that self-destructs after being viewed.<br>Powered by <a href="https://onetimesecret.com" target="_blank" style="color:var(--green);text-decoration:none;">OneTimeSecret</a> — open source, no account needed.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <span class="card-title">envcrypted — secure key share</span>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Step indicator -->
+        <div class="step-indicator">
+          <div class="step active" id="step1">1. Create</div>
+          <div class="step" id="step2">2. Share</div>
+        </div>
+
+        <!-- How it works mini -->
+        <div class="how-row">
+          <div class="how-step"><span class="how-icon">🔑</span>Paste key</div>
+          <div class="how-step"><span class="how-icon">🔗</span>Get link</div>
+          <div class="how-step"><span class="how-icon">📤</span>Share link</div>
+          <div class="how-step"><span class="how-icon">💥</span>Link dies</div>
+        </div>
+
+        <!-- Error -->
+        <div class="error-msg" id="errorMsg"></div>
+
+        <!-- CREATE FORM -->
+        <div id="createForm">
+          <div class="warning-box">
+            <strong>⚠ Never share your master key over WhatsApp, Slack, or email.</strong><br>
+            Use this tool instead — the link works only once, then self-destructs.
+          </div>
+
+          <div class="form-group">
+            <label>Master Key</label>
+            <div class="input-wrap">
+              <input type="password" id="masterKey" placeholder="Paste your envcrypted master key..." autocomplete="off" spellcheck="false" />
+              <button class="toggle-vis" onclick="toggleVisibility()" title="Show/hide key">👁</button>
+            </div>
+            <div class="input-hint">Your key never leaves your browser unencrypted. It is sent directly to OneTimeSecret over HTTPS.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Expires after</label>
+            <div class="expiry-grid">
+              <button class="expiry-btn" onclick="setExpiry(3600, this)">1 hour</button>
+              <button class="expiry-btn selected" onclick="setExpiry(86400, this)">24 hours</button>
+              <button class="expiry-btn" onclick="setExpiry(259200, this)">3 days</button>
+              <button class="expiry-btn" onclick="setExpiry(604800, this)">7 days</button>
+            </div>
+            <div class="input-hint">Link self-destructs after this time OR after first view — whichever comes first.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Passphrase (optional)</label>
+            <input type="password" id="passphrase" placeholder="Add extra protection..." autocomplete="off" />
+            <div class="input-hint">If set, recipient must enter this passphrase to view the key. Share it separately.</div>
+          </div>
+
+          <div class="info-box">
+            <strong>How this works:</strong> Your master key is sent to OneTimeSecret's API over HTTPS. They encrypt and store it. You get a unique one-time URL. When your teammate opens it, the key is shown once — then permanently deleted. Not even OneTimeSecret can retrieve it after that.
+          </div>
+
+          <button class="btn" id="createBtn" onclick="createLink()">
+            🔗 Generate One-Time Link
+          </button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div class="result-screen" id="resultScreen">
+
+          <div style="text-align:center; margin-bottom:24px;">
+            <div style="font-size:48px; margin-bottom:12px;">✅</div>
+            <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:var(--green); margin-bottom:6px;">One-time link created!</div>
+            <div style="font-size:12px; color:var(--text2);">Send this link to your teammate. It works exactly once.</div>
+          </div>
+
+          <div class="link-box">
+            <div class="link-label">🔗 Your One-Time Link</div>
+            <div class="link-url" id="generatedLink">—</div>
+          </div>
+
+          <button class="copy-link-btn" id="copyBtn" onclick="copyLink()">
+            📋 Copy Link
+          </button>
+
+          <div class="warning-box">
+            <strong>⚠ Important:</strong> Once your teammate opens this link, the master key is gone. Make sure you still have your own copy saved somewhere safe before sharing.
+          </div>
+
+          <div class="success-note">
+            Share this link over <strong>any channel</strong> — WhatsApp, Slack, email.<br>
+            The link itself reveals nothing. The key is only shown once, then destroyed.
+          </div>
+
+          <button class="new-link-btn" onclick="resetForm()">↺ Create another link</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--text2); line-height:1.6;">
+      Powered by <a href="https://onetimesecret.com" target="_blank" style="color:var(--green); text-decoration:none;">OneTimeSecret</a> — open source secret sharing.
+      No account required. Keys are deleted after viewing.
+    </div>
+  </div>
+
+  <script>
+    let selectedExpiry = 86400; // default 24 hours
+
+    function setExpiry(seconds, btn) {
+      selectedExpiry = seconds;
+      document.querySelectorAll('.expiry-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function toggleVisibility() {
+      const input = document.getElementById('masterKey');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+
+    function hideError() {
+      document.getElementById('errorMsg').classList.remove('show');
+    }
+
+    async function createLink() {
+      hideError();
+
+      const masterKey = document.getElementById('masterKey').value.trim();
+      const passphrase = document.getElementById('passphrase').value.trim();
+
+      if (!masterKey) {
+        showError('⚠ Please enter your master key first.');
+        return;
+      }
+
+      if (masterKey.length < 8) {
+        showError('⚠ Master key seems too short. Please double-check.');
+        return;
+      }
+
+      const btn = document.getElementById('createBtn');
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.textContent = '⏳ Creating secure link...';
+
+      try {
+        const body = new URLSearchParams();
+        body.append('secret', masterKey);
+        body.append('ttl', selectedExpiry);
+        if (passphrase) body.append('passphrase', passphrase);
+
+        // Use anonymous API — no account needed
+        const response = await fetch('https://onetimesecret.com/api/v1/share', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString()
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.secret_key) {
+          throw new Error('No secret key returned from API.');
+        }
+
+        const link = `https://onetimesecret.com/secret/${data.secret_key}`;
+        document.getElementById('generatedLink').textContent = link;
+
+        // Show result
+        document.getElementById('createForm').style.display = 'none';
+        document.getElementById('resultScreen').classList.add('show');
+
+        // Update steps
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step1').classList.add('done');
+        document.getElementById('step2').classList.add('active');
+
+      } catch (err) {
+        showError(`⚠ Failed to create link: ${err.message}. Check your connection and try again.`);
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        btn.textContent = '🔗 Generate One-Time Link';
+      }
+    }
+
+    function copyLink() {
+      const link = document.getElementById('generatedLink').textContent;
+      navigator.clipboard.writeText(link).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = '📋 Copy Link', 2000);
+      });
+    }
+
+    function resetForm() {
+      document.getElementById('masterKey').value = '';
+      document.getElementById('passphrase').value = '';
+      document.getElementById('createForm').style.display = 'block';
+      document.getElementById('resultScreen').classList.remove('show');
+      document.getElementById('step1').classList.add('active');
+      document.getElementById('step1').classList.remove('done');
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('createBtn').disabled = false;
+      document.getElementById('createBtn').classList.remove('loading');
+      document.getElementById('createBtn').textContent = '🔗 Generate One-Time Link';
+      hideError();
+    }
+  </script>
+</body>
+</html>
