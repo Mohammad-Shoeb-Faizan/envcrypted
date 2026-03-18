@@ -1,6 +1,6 @@
 # envcrypted 🔐
 
-> Secure your `.env` files with AES-256 encryption. Share safely with your team via local vault or GitHub. Zero account. Zero server. Just works.
+> A dev-friendly CLI workflow for encrypting, auditing, and sharing your environment secrets. AES-256-GCM. Zero account. Zero server. Just works.
 
 [![npm version](https://img.shields.io/npm/v/envcrypted)](https://www.npmjs.com/package/envcrypted)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -13,7 +13,7 @@ Every developer has faced this:
 
 ```
 "Hey, can you send me the .env file?"
-"Sure, sending on WhatsApp..."
+"Sure, sending it over..."
 ```
 
 Your secrets travel over chat apps, emails, Slack messages. They get leaked, forgotten, or go out of sync between team members. **envcrypted fixes this.**
@@ -36,6 +36,7 @@ Your secrets travel over chat apps, emails, Slack messages. They get leaked, for
 - Detects weak/exposed values with the built-in auditor
 - Auto-protects `.gitignore` on init
 - Git pre-commit hook to block accidental `.env` commits
+- Share master key safely via self-destructing one-time links
 
 ---
 
@@ -199,6 +200,21 @@ npx envcrypted doctor
 
 ---
 
+## Sharing the Master Key
+
+After encrypting your vault, you need to share the master key with your team. **Don't send it over chat apps or email.** Use a self-destructing one-time link instead.
+
+The envcrypted docs include a built-in **Share Key** page powered by [OneTimeSecret](https://onetimesecret.com) — open source, no account needed:
+
+1. Paste your master key
+2. Get a unique one-time link
+3. Send it over any channel — the link reveals nothing about the content
+4. Your teammate opens it once → key shown → link self-destructs permanently
+
+🔗 **[Share your master key safely →](https://mohammad-shoeb-faizan.github.io/envcrypted/share-key.html)**
+
+---
+
 ## Workflow
 
 **Team Lead (Project Setup):**
@@ -209,7 +225,7 @@ npx envcrypted audit        # scan .env for issues first
 npx envcrypted generate     # create .env.example for team
 npx envcrypted hook install # block accidental .env commits
 npx envcrypted push         # encrypt .env → .env.vault
-# share master key with team securely (password manager, etc.)
+# share master key using: https://mohammad-shoeb-faizan.github.io/envcrypted/share-key.html
 ```
 
 **New Team Member:**
@@ -228,7 +244,7 @@ npx envcrypted doctor       # full diagnosis with fixes
 **Rotating Keys:**
 ```bash
 npx envcrypted push         # enter new master key
-# Share new key with team
+# share new key via one-time link
 ```
 
 ---
@@ -243,6 +259,7 @@ npx envcrypted push         # enter new master key
 | IV | 16 bytes random per encryption |
 | Auth tag | 16 bytes (tamper detection) |
 | Master key | Never stored anywhere. Only you hold it. |
+| Key sharing | One-time self-destructing links via OneTimeSecret |
 
 The encrypted `.env.vault` is safe to commit to public or private repos. Without the master key, it is unreadable.
 
