@@ -291,3 +291,68 @@ The encrypted `.env.vault` is safe to commit to public or private repos. Without
 ## License
 
 MIT — Free forever. Use it, share it, build on it.
+
+
+
+
+
+---
+
+## Roadmap
+
+These are planned improvements based on real developer feedback. Nothing is promised — but everything here is being actively thought about.
+
+### 🔜 Coming Next
+
+**`envcrypted setup`**  
+A single command that runs the full team lead flow interactively — `init` + `audit` + `generate` + `hook install` + `push` — in one guided session. Zero friction onboarding.
+
+**`envcrypted push --share`**  
+Encrypts your `.env` and immediately opens OneTimeSecret with your secret key ready to share. One command. Vault encrypted. Key shared. Done.
+
+**Auto-detect `.env`**  
+Remove the need to run `init` before other commands. If a `.env` exists in the current directory, envcrypted should just work.
+
+**Stronger `audit` patterns**  
+Real regex detection for common secret formats — AWS access keys, Stripe live keys, GitHub tokens, Twilio, SendGrid, Firebase, and more. Not just weak password checks.
+
+---
+
+### 💡 Considering
+
+**`envcrypted rotate`**  
+Re-encrypt the vault with a new secret key in one command. Automatically notifies team members that a new key is in use.
+
+**`envcrypted diff`**  
+Compare two vaults or two `.env` files and show what changed — without revealing actual values. Useful for auditing key rotations.
+
+**`envcrypted history`**  
+Local changelog of when the vault was last pushed, pulled, or audited. No cloud. No server. Just a local log file.
+
+**`envcrypted verify`**  
+Let a teammate verify their `.env` matches the current vault — without sharing the actual values. Hash-based comparison.
+
+**Multiple vault support**  
+Support for `.env.staging`, `.env.production` — each with its own vault and secret key.
+
+**VS Code extension**  
+Warnings directly in the editor when a `.env` value looks weak or exposed. No terminal needed.
+
+---
+
+### 🚫 Out of Scope (by design)
+
+These will never be added — they go against the zero-account, zero-server philosophy that makes envcrypted trustworthy:
+
+- Cloud storage of secret keys
+- Web dashboard or SaaS version
+- Telemetry or usage tracking
+- Paid tiers or paywalled features
+
+---
+
+Have an idea? Open a discussion on [GitHub](https://github.com/Mohammad-Shoeb-Faizan/envcrypted/discussions). The best features come from real problems.
+
+---
+
+Have an idea? Reach out on [LinkedIn](https://linkedin.com/in/mohammad-shoeb-faizan) or [open an issue](https://github.com/Mohammad-Shoeb-Faizan/envcrypted/issues/new) on GitHub.
