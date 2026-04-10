@@ -1,3 +1,4 @@
+<!-- docs/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -451,7 +452,7 @@
     <div class="hero-grid"></div>
     <div class="hero-glow"></div>
     <div class="hero-content">
-      <div class="hero-badge">v1.1.0 — 8 Commands Now Available</div>
+      <div class="hero-badge">v1.2.0 — 9 Commands Now Available</div>
       <h1>
         <span class="dim">Stop sharing</span><br>
         <span class="green">.env</span> files<br>
@@ -459,7 +460,8 @@
       </h1>
       <p class="hero-sub">
         A dev-friendly CLI workflow for encrypting, auditing, and sharing your environment secrets.
-        AES-256-GCM. Zero account. Zero server. Zero drama.
+        AES-256-GCM. Zero account. Zero server. Zero drama.<br>
+        Run apps securely without exposing .env using envcrypted run.
       </p>
       <div class="hero-install">
         <span class="prompt">$</span>
@@ -468,7 +470,7 @@
       </div>
       <div class="hero-stats">
         <div class="hero-stat"><span class="num">AES-256</span><span class="label">Encryption</span></div>
-        <div class="hero-stat"><span class="num">8</span><span class="label">Commands</span></div>
+        <div class="hero-stat"><span class="num">9</span><span class="label">Commands</span></div>
         <div class="hero-stat"><span class="num">0</span><span class="label">Accounts needed</span></div>
         <div class="hero-stat"><span class="num">MIT</span><span class="label">Free Forever</span></div>
       </div>
@@ -596,10 +598,13 @@
           <br>
           <div><span class="t-dim">$</span> <span class="t-green">npx envcrypted pull</span></div>
           <div><span class="t-cyan">&nbsp;&nbsp;✔&nbsp;&nbsp;.env restored successfully!</span></div>
+          <br>
+          <div><span class="t-dim">$</span> <span class="t-green">npx envcrypted run node app.js</span></div>
+          <div><span class="t-cyan">&nbsp;&nbsp;✔&nbsp;&nbsp;Environment loaded securely in memory</span></div>
 
       <div class="fade-in" style="margin-top: 48px;">
         <div style="font-size:11px; color:var(--text2); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">
-          ▶ Interactive Demo — all 8 commands
+          ▶ Interactive Demo — all 9 commands
         </div>
         <iframe
           src="terminal-demo.html"
@@ -619,7 +624,7 @@
   <section class="commands" id="commands">
     <div class="container">
       <div class="section-label">Commands</div>
-      <h2 class="section-title fade-in">8 commands.<br><span style="color:var(--green)">Complete workflow.</span></h2>
+      <h2 class="section-title fade-in">9 commands.<br><span style="color:var(--green)">Complete workflow.</span></h2>
       <p class="section-sub fade-in">Everything your team needs to secure, share, audit, and sync environment variables.</p>
 
       <div class="cmd-section-title">Core — encrypt &amp; decrypt</div>
@@ -654,7 +659,7 @@
         </div>
       </div>
 
-      <div class="cmd-section-title">New in v1.1.0 — team productivity</div>
+      <div class="cmd-section-title">New in v1.2.0 — productivity &amp; runtime</div>
       <div class="cmd-grid-3">
         <div class="cmd-card fade-in">
           <div class="cmd-card-header"><span class="cmd-name">envcrypted generate</span><span class="cmd-badge badge-utility">Utility</span></div>
@@ -673,8 +678,15 @@
         <div class="cmd-card fade-in">
           <div class="cmd-card-header"><span class="cmd-name">envcrypted doctor</span><span class="cmd-badge badge-health">Health</span></div>
           <div class="cmd-card-body">
-            <p class="cmd-desc">Runs 8 health checks on your setup and tells you exactly what's wrong and how to fix it.</p>
+            <p class="cmd-desc">Runs 9 health checks on your setup and tells you exactly what's wrong and how to fix it.</p>
             <div class="cmd-usage"><span class="prompt">$</span>npx envcrypted doctor</div>
+          </div>
+        </div>
+        <div class="cmd-card fade-in">
+          <div class="cmd-card-header"><span class="cmd-name">envcrypted run</span><span class="cmd-badge badge-setup" style="background:rgba(0,255,136,0.1); color:var(--green);">Runtime</span></div>
+          <div class="cmd-card-body">
+            <p class="cmd-desc">Run your app with encrypted environment variables loaded in memory. No .env file is written to disk. Works with any Node.js command.</p>
+            <div class="cmd-usage"><span class="prompt">$</span>npx envcrypted run node app.js</div>
           </div>
         </div>
       </div>
@@ -939,7 +951,7 @@
       "url": "https://linkedin.com/in/mohammad-shoeb-faizan"
     },
     "license": "https://opensource.org/licenses/MIT",
-    "version": "1.1.0"
+    "version": "1.2.0"
   }
   </script>
 
@@ -1004,6 +1016,7 @@
       'npx envcrypted generate',
       'npx envcrypted status',
       'npx envcrypted doctor',
+      'npx envcrypted run node app.js',
       'npx envcrypted hook install'
     ];
     let ci = 0, chi = 0, deleting = false;

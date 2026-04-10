@@ -1,3 +1,4 @@
+<!-- docs/terminal-demo.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +60,7 @@
   <div class="demo-wrapper">
     <div class="demo-header">
       <h1>env<span>crypted</span> 🔐</h1>
-      <p>Watch all 8 commands in action — v1.1.0 live demo</p>
+      <p>Watch all 9 commands in action — v1.2.0 live demo</p>
     </div>
 
     <div class="tab-bar" id="tabBar">
@@ -71,6 +72,7 @@
       <div class="tab" onclick="jumpToStep(5)">$ status</div>
       <div class="tab" onclick="jumpToStep(6)">$ hook</div>
       <div class="tab" onclick="jumpToStep(7)">$ doctor</div>
+      <div class="tab" onclick="jumpToStep(8)">$ run</div>
     </div>
 
     <div class="terminal">
@@ -80,7 +82,7 @@
         <div class="dot g"></div>
         <span class="terminal-path">
           <span class="path-green">~/my-project</span>
-          &nbsp;—&nbsp;envcrypted v1.1.0
+          &nbsp;—&nbsp;envcrypted v1.2.0
         </span>
       </div>
       <div class="terminal-body" id="termBody"></div>
@@ -89,7 +91,7 @@
           <button class="ctrl-btn active" id="playBtn" onclick="togglePlay()">⏸ PAUSE</button>
           <button class="ctrl-btn" onclick="restartDemo()">↺ RESTART</button>
         </div>
-        <span class="speed-label" id="stepLabel">Step 1 of 8 — npx envcrypted init</span>
+        <span class="speed-label" id="stepLabel">Step 1 of 9 — npx envcrypted init</span>
       </div>
     </div>
 
@@ -102,6 +104,7 @@
       <div class="step-dot" onclick="jumpToStep(5)"></div>
       <div class="step-dot" onclick="jumpToStep(6)"></div>
       <div class="step-dot" onclick="jumpToStep(7)"></div>
+      <div class="step-dot" onclick="jumpToStep(8)"></div>
     </div>
 
     <div class="step-labels">
@@ -113,6 +116,7 @@
       <span class="step-label-item" onclick="jumpToStep(5)">status</span>
       <span class="step-label-item" onclick="jumpToStep(6)">hook</span>
       <span class="step-label-item" onclick="jumpToStep(7)">doctor</span>
+      <span class="step-label-item" onclick="jumpToStep(8)">run</span>
     </div>
   </div>
 
@@ -128,7 +132,7 @@
         { type: 'blank', delay: 500 },
         { type: 'cmd', text: 'npx envcrypted init', delay: 0 },
         { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-dim', text: '  v1.1.0 — Secure .env encryption. Zero account. Zero server. Just works.', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  v1.2.0 — Secure .env encryption. Zero account. Zero server. Just works.', delay: 500 },
         { type: 'blank', delay: 300 },
         { type: 'out', cls: 'out-white', text: '  Setting up envcrypted...', delay: 400 },
         { type: 'blank', delay: 300 },
@@ -264,7 +268,7 @@
         { type: 'blank', delay: 300 },
         { type: 'out', cls: 'out-green', text: '  ✔  Initialized', delay: 400 },
         { type: 'out', cls: 'out-dim', text: '     Storage  : local', delay: 150 },
-        { type: 'out', cls: 'out-dim', text: '     Version  : 1.1.0', delay: 150 },
+        { type: 'out', cls: 'out-dim', text: '     Version  : 1.2.0', delay: 150 },
         { type: 'out', cls: 'out-dim', text: '     Created  : 18/03/2026, 10:30 AM', delay: 150 },
         { type: 'blank', delay: 200 },
         { type: 'out', cls: 'out-green', text: '  ✔  .env found (6 variables, 0.3kb)', delay: 300 },
@@ -321,6 +325,23 @@
         { type: 'out', cls: 'out-dim', text: '  Tip: Run "npx envcrypted hook install" for extra safety.', delay: 300 },
         { type: 'out', cls: 'out-dim', text: '  Tip: Run "npx envcrypted generate" to create .env.example.', delay: 300 },
       ]
+    },
+    {
+      label: 'npx envcrypted run',
+      lines: [
+        { type: 'out', cls: 'out-dim', text: '  # Run your app without ever writing .env to disk', delay: 0 },
+        { type: 'blank', delay: 300 },
+        { type: 'cmd', text: 'npx envcrypted run node app.js', delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  ? Enter your master key: ', extra: { cls: 'out-white', text: '••••••••••••••••••••••••••••••••' }, delay: 800 },
+        { type: 'blank', delay: 500 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Environment loaded securely', delay: 600 },
+        { type: 'out', cls: 'out-cyan', text: '  ✔  Running command...', delay: 300 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-white', text: '  ENV VALUE: example_output', delay: 500 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  # No .env file was created during this process.', delay: 300 },
+      ]
     }
   ];
 
@@ -352,7 +373,7 @@
     document.querySelectorAll('.step-dot').forEach((d, i) => { d.classList.remove('active', 'done'); if (i === currentStep) d.classList.add('active'); else if (i < currentStep) d.classList.add('done'); });
     document.querySelectorAll('.step-label-item').forEach((l, i) => { l.classList.remove('active'); if (i === currentStep) l.classList.add('active'); });
   }
-  function updateStepLabel() { document.getElementById('stepLabel').textContent = `Step ${currentStep + 1} of 8 — ${STEPS[currentStep].label}`; }
+  function updateStepLabel() { document.getElementById('stepLabel').textContent = `Step ${currentStep + 1} of 9 — ${STEPS[currentStep].label}`; }
 
   function playNextLine() {
     if (!isPlaying) return;

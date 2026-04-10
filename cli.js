@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// cli.js
+
 
 'use strict';
 
@@ -278,6 +280,92 @@ program
     console.log('');
     allGood ? console.log(chalk.green.bold('  ✔  Everything looks great! Your setup is healthy.\n')) : console.log(chalk.red.bold('  ✖  Some issues found. Fix them above and run "npx envcrypted doctor" again.\n'));
   });
+
+// DOCTOR (your last existing command above)
+
+// 👇 PASTE HERE (new run command)
+
+// RUN COMMAND
+const { exec } = require('child_process');
+const { decrypt } = require('./crypto');
+
+program
+  .command('run')
+  .description('Run your app with decrypted environment variables (in-memory, no .env exposure)')
+  .argument('<cmd...>', 'Command to run')
+  .action(async (cmd) => {
+    const config = loadConfig();
+
+    if (!config) {
+      console.log(chalk.red('\n  ✖  Not initialized. Run "npx envcrypted init" first.\n'));
+      process.exit(1);
+    }
+
+    const { masterKey } = await inquirer.prompt([
+      {
+        type: 'password',
+        name: 'masterKey',
+        message: 'Enter your master key:',
+        mask: '*',
+        validate: (val) => val.length >= 8 ? true : 'Master key too short.'
+      }
+    ]);
+
+    const spinner = ora('Decrypting vault in memory...').start();
+
+    try {
+      const vaultPath = path.join(process.cwd(), VAULT_FILENAME);
+
+      if (!fs.existsSync(vaultPath)) {
+        throw new Error('.env.vault not found. Run "envcrypted push" first.');
+      }
+
+      const encrypted = fs.readFileSync(vaultPath, 'utf8');
+      const decrypted = decrypt(encrypted, masterKey);
+
+      const envVars = {};
+
+      decrypted.split('\n').forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) return;
+
+        const index = trimmed.indexOf('=');
+        if (index === -1) return;
+
+        const key = trimmed.slice(0, index);
+        const value = trimmed.slice(index + 1);
+
+        envVars[key] = value;
+      });
+
+      spinner.succeed(chalk.green('Environment loaded securely. Running command...\n'));
+
+      const command = cmd.join(' ');
+
+      const child = exec(command, {
+        env: { ...process.env, ...envVars },
+        shell: true
+      });
+
+      child.stdout?.pipe(process.stdout);
+      child.stderr?.pipe(process.stderr);
+
+      child.on('exit', (code) => {
+        process.exit(code);
+      });
+
+    } catch (err) {
+      spinner.fail(chalk.red(`Failed: ${err.message}`));
+
+      if (err.message.includes('Unsupported state')) {
+        console.log(chalk.yellow('  ⚠  Wrong master key. Decryption failed.\n'));
+      }
+
+      process.exit(1);
+    }
+  });
+
+
 
 // RUN
 program

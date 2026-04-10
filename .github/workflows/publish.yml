@@ -1,3 +1,4 @@
+# .github/workflows/publish.yml
 name: Publish to NPM
 
 on:

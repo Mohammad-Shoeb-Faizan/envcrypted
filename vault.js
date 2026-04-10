@@ -1,3 +1,4 @@
+// vault.js
 const fs = require('fs');
 const path = require('path');
 const { encrypt, decrypt } = require('./crypto');

@@ -1,3 +1,4 @@
+<!-- README.md -->
 # envcrypted 🔐
 
 > A dev-friendly CLI workflow for encrypting, auditing, and sharing your environment secrets. AES-256-GCM. Zero account. Zero server. Just works.
@@ -37,6 +38,11 @@ Your secrets travel over chat apps, emails, Slack messages. They get leaked, for
 - Auto-protects `.gitignore` on init
 - Git pre-commit hook to block accidental `.env` commits
 - Share master key safely via self-destructing one-time links
+
+You can also run your app securely without exposing `.env`:
+
+```bash
+envcrypted run node app.js
 
 ---
 
@@ -96,6 +102,17 @@ Pulls the vault (from GitHub if applicable) and decrypts it back to `.env`.
 ```bash
 npx envcrypted pull
 ```
+
+### `envcrypted run`
+Run your app with decrypted environment variables — without exposing .env on disk.
+
+```bash
+npx envcrypted run node app.js
+npx envcrypted run npm start
+```
+• Decrypts .env.vault in memory
+• Injects variables into your app
+• Never writes .env to disk
 
 ### `envcrypted audit`
 Scans your `.env` for critical issues and warnings — weak passwords, placeholder keys, exposed DB URIs, HTTP URLs, debug flags, and more.
@@ -211,7 +228,7 @@ The envcrypted docs include a built-in **Share Key** page powered by [OneTimeSec
 3. Send it over any channel — the link reveals nothing about the content
 4. Your teammate opens it once → key shown → link self-destructs permanently
 
-🔗 **[Share your master key safely →](https://mohammad-shoeb-faizan.github.io/envcrypted/share-key.html)**
+🔗 **[Share your master key safely →](https://onetimesecret.com)**
 
 ---
 
@@ -225,7 +242,7 @@ npx envcrypted audit        # scan .env for issues first
 npx envcrypted generate     # create .env.example for team
 npx envcrypted hook install # block accidental .env commits
 npx envcrypted push         # encrypt .env → .env.vault
-# share master key using: https://mohammad-shoeb-faizan.github.io/envcrypted/share-key.html
+# share master key using: https://onetimesecret.com
 ```
 
 **New Team Member:**
