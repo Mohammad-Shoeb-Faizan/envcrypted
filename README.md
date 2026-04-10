@@ -38,11 +38,13 @@ Your secrets travel over chat apps, emails, Slack messages. They get leaked, for
 - Auto-protects `.gitignore` on init
 - Git pre-commit hook to block accidental `.env` commits
 - Share master key safely via self-destructing one-time links
+- **Run apps securely in-memory** without `.env` files on disk
 
 You can also run your app securely without exposing `.env`:
 
 ```bash
-envcrypted run node app.js
+npx envcrypted run node app.js
+```
 
 ---
 
@@ -61,6 +63,7 @@ npx envcrypted init
 npx envcrypted audit
 npx envcrypted push
 npx envcrypted pull
+npx envcrypted run node app.js
 ```
 
 ### Or add to your `package.json` scripts for convenience:
@@ -110,9 +113,9 @@ Run your app with decrypted environment variables — without exposing .env on d
 npx envcrypted run node app.js
 npx envcrypted run npm start
 ```
-• Decrypts .env.vault in memory
-• Injects variables into your app
-• Never writes .env to disk
+• Decrypts `.env.vault` in memory
+• Injects variables into your app (`process.env`)
+• Never writes `.env` to disk
 
 ### `envcrypted audit`
 Scans your `.env` for critical issues and warnings — weak passwords, placeholder keys, exposed DB URIs, HTTP URLs, debug flags, and more.
@@ -174,7 +177,7 @@ npx envcrypted status
 
 ✔  Initialized
      Storage  : local
-     Version  : 1.1.0
+     Version  : 1.2.0
      Created  : 18/03/2026
 
 ✔  .env found (6 variables, 0.3kb)
@@ -193,7 +196,7 @@ npx envcrypted hook uninstall
 ```
 
 ### `envcrypted doctor`
-Runs 8 health checks on your setup and tells you exactly what's wrong and how to fix it.
+Runs 9 health checks on your setup and tells you exactly what's wrong and how to fix it.
 
 ```bash
 npx envcrypted doctor
@@ -228,7 +231,7 @@ The envcrypted docs include a built-in **Share Key** page powered by [OneTimeSec
 3. Send it over any channel — the link reveals nothing about the content
 4. Your teammate opens it once → key shown → link self-destructs permanently
 
-🔗 **[Share your master key safely →](https://onetimesecret.com)**
+🔗 **[Share your master key safely →](https://mohammad-shoeb-faizan.github.io/envcrypted/)** (or via [OneTimeSecret](https://onetimesecret.com))
 
 ---
 
@@ -242,7 +245,7 @@ npx envcrypted audit        # scan .env for issues first
 npx envcrypted generate     # create .env.example for team
 npx envcrypted hook install # block accidental .env commits
 npx envcrypted push         # encrypt .env → .env.vault
-# share master key using: https://onetimesecret.com
+# share master key using: https://mohammad-shoeb-faizan.github.io/envcrypted/
 ```
 
 **New Team Member:**
@@ -308,10 +311,6 @@ The encrypted `.env.vault` is safe to commit to public or private repos. Without
 ## License
 
 MIT — Free forever. Use it, share it, build on it.
-
-
-
-
 
 ---
 
